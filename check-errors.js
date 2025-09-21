@@ -13,8 +13,8 @@ if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
 async function takeScreenshot(page, screenshotPath) {
   try {
-    await page.evaluate(() => document.fonts.ready);  // wait for fonts
-    await page.waitForTimeout(1000);                  // short wait for rendering
+    await page.evaluate(() => document.fonts.ready); // wait for fonts
+    await page.waitForTimeout(1000);                 // wait 1s for rendering
     await page.screenshot({ path: screenshotPath, fullPage: true });
   } catch (err) {
     console.error(`⚠️ Failed to take screenshot: ${err.message}`);
@@ -22,11 +22,21 @@ async function takeScreenshot(page, screenshotPath) {
 }
 
 async function checkSite(site) {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--disable-software-rasterizer'
+    ],
+  });
   const page = await browser.newPage();
 
   const pendingScreenshots = [];
 
+  // Capture console errors
   page.on('console', msg => {
     if (msg.type() === 'error') {
       const filename = `${site.name.replace(/\s+/g, '_')}-${Date.now()}.png`;
@@ -35,14 +45,16 @@ async function checkSite(site) {
       pendingScreenshots.push(
         (async () => {
           await takeScreenshot(page, screenshotPath);
-          Sentry.withScope(scope => {
-            scope.addAttachment({
-              filename,
-              data: fs.readFileSync(screenshotPath),
-              contentType: 'image/png',
+          if (fs.existsSync(screenshotPath)) {
+            Sentry.withScope(scope => {
+              scope.addAttachment({
+                filename,
+                data: fs.readFileSync(screenshotPath),
+                contentType: 'image/png',
+              });
+              Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
             });
-            Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
-          });
+          }
           console.error(`${site.name} console error: ${msg.text()}`);
         })()
       );
@@ -61,21 +73,22 @@ async function checkSite(site) {
     pendingScreenshots.push(
       (async () => {
         await takeScreenshot(page, screenshotPath);
-        Sentry.withScope(scope => {
-          if (fs.existsSync(screenshotPath)) {
+        if (fs.existsSync(screenshotPath)) {
+          Sentry.withScope(scope => {
             scope.addAttachment({
               filename,
               data: fs.readFileSync(screenshotPath),
               contentType: 'image/png',
             });
-          }
-          Sentry.captureException(err);
-        });
+            Sentry.captureException(err);
+          });
+        }
       })()
     );
   }
 
-  await Promise.all(pendingScreenshots);  // wait for all screenshots
+  // Wait for all screenshots to finish before closing
+  await Promise.all(pendingScreenshots);
   await browser.close();
 }
 
