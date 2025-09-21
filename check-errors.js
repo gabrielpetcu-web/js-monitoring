@@ -15,23 +15,29 @@ async function checkSite(site) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  // Capture console errors and take screenshot immediately
-  page.on('console', async msg => {
+  // Store pending screenshot promises
+  const pendingScreenshots = [];
+
+  page.on('console', msg => {
     if (msg.type() === 'error') {
       const filename = `${site.name.replace(/\s+/g, '_')}-${Date.now()}.png`;
       const screenshotPath = path.join(screenshotDir, filename);
-      await page.screenshot({ path: screenshotPath, fullPage: true });
 
-      Sentry.withScope(scope => {
-        scope.addAttachment({
-          filename,
-          data: fs.readFileSync(screenshotPath),
-          contentType: 'image/png',
-        });
-        Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
-      });
-
-      console.error(`${site.name} console error: ${msg.text()}`);
+      // Push the screenshot promise to the array
+      pendingScreenshots.push(
+        (async () => {
+          await page.screenshot({ path: screenshotPath, fullPage: true });
+          Sentry.withScope(scope => {
+            scope.addAttachment({
+              filename,
+              data: fs.readFileSync(screenshotPath),
+              contentType: 'image/png',
+            });
+            Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
+          });
+          console.error(`${site.name} console error: ${msg.text()}`);
+        })()
+      );
     }
   });
 
@@ -43,20 +49,26 @@ async function checkSite(site) {
 
     const filename = `${site.name.replace(/\s+/g, '_')}-load-error-${Date.now()}.png`;
     const screenshotPath = path.join(screenshotDir, filename);
-    await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
 
-    Sentry.withScope(scope => {
-      if (fs.existsSync(screenshotPath)) {
-        scope.addAttachment({
-          filename,
-          data: fs.readFileSync(screenshotPath),
-          contentType: 'image/png',
+    pendingScreenshots.push(
+      (async () => {
+        await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+        Sentry.withScope(scope => {
+          if (fs.existsSync(screenshotPath)) {
+            scope.addAttachment({
+              filename,
+              data: fs.readFileSync(screenshotPath),
+              contentType: 'image/png',
+            });
+          }
+          Sentry.captureException(err);
         });
-      }
-      Sentry.captureException(err);
-    });
+      })()
+    );
   }
 
+  // Wait for all screenshots to finish before closing
+  await Promise.all(pendingScreenshots);
   await browser.close();
 }
 
