@@ -8,6 +8,7 @@ Sentry.init({
 
 let totalErrors = 0;
 let sitesLoaded = 0;
+const errorSites = new Set(); // track sites with console errors
 
 async function checkSite(site) {
   const browser = await chromium.launch({
@@ -27,8 +28,10 @@ async function checkSite(site) {
   page.on('console', msg => {
     if (msg.type() === 'error') {
       totalErrors++;
-      console.error(`${site.name} console error: ${msg.text()}`);
-      Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
+      errorSites.add(site.name);
+      const errorMessage = `[${site.name}] ${msg.text()}`;
+      console.error(errorMessage);
+      Sentry.captureMessage(errorMessage, 'error');
     }
   });
 
@@ -38,7 +41,8 @@ async function checkSite(site) {
     sitesLoaded++;
   } catch (err) {
     console.error(`❌ ${site.name} failed to load:`, err);
-    Sentry.captureException(err);
+    errorSites.add(site.name);
+    Sentry.captureException(new Error(`[${site.name}] ${err.message}`));
   }
 
   await browser.close();
@@ -52,6 +56,12 @@ async function checkSite(site) {
   // Summary
   console.log('\n===== Monitoring Summary =====');
   console.log(`✅ Sites loaded successfully: ${sitesLoaded} / ${sites.length}`);
-  console.log(`⚠️ Console errors captured: ${totalErrors}`);
+  console.log(`⚠️ Total console errors captured: ${totalErrors}`);
+  if (errorSites.size > 0) {
+    console.log('⚠️ Sites with errors:');
+    errorSites.forEach(siteName => console.log(`- ${siteName}`));
+  } else {
+    console.log('✅ No console errors detected on any site');
+  }
   console.log('===============================\n');
 })();
