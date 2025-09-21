@@ -1,47 +1,39 @@
 const { chromium } = require('playwright');
 const Sentry = require('@sentry/node');
 const fs = require('fs');
+const sites = require('./sites.json');
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
 });
 
-(async () => {
+async function checkSite(site) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  // Capture console errors
   page.on('console', async msg => {
     if (msg.type() === 'error') {
-      const errorMsg = `Console error: ${msg.text()}`;
-      console.error(errorMsg);
-
-      // Take screenshot on error
-      const screenshotPath = `screenshot-${Date.now()}.png`;
+      const screenshotPath = `${site.name.replace(/\s+/g, '_')}-${Date.now()}.png`;
       await page.screenshot({ path: screenshotPath, fullPage: true });
-
-      // Attach screenshot to Sentry
       Sentry.withScope(scope => {
         scope.addAttachment({
           filename: screenshotPath,
           data: fs.readFileSync(screenshotPath),
           contentType: 'image/png',
         });
-        Sentry.captureMessage(errorMsg, 'error');
+        Sentry.captureMessage(`${site.name}: ${msg.text()}`, 'error');
       });
+      console.error(`${site.name} console error: ${msg.text()}`);
     }
   });
 
   try {
-    await page.goto(process.env.SITE_URL, { waitUntil: 'load', timeout: 60000 });
-    console.log("✅ Site loaded without blocking errors");
+    await page.goto(site.url, { waitUntil: 'load', timeout: 60000 });
+    console.log(`✅ ${site.name} loaded`);
   } catch (err) {
-    console.error("❌ Failed to load site", err);
-
-    // Screenshot if page failed to load
-    const screenshotPath = `load-error-${Date.now()}.png`;
+    console.error(`❌ ${site.name} failed to load:`, err);
+    const screenshotPath = `${site.name.replace(/\s+/g, '_')}-load-error-${Date.now()}.png`;
     await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
-
     Sentry.withScope(scope => {
       if (fs.existsSync(screenshotPath)) {
         scope.addAttachment({
@@ -55,4 +47,10 @@ Sentry.init({
   }
 
   await browser.close();
+}
+
+(async () => {
+  for (const site of sites) {
+    await checkSite(site);
+  }
 })();
