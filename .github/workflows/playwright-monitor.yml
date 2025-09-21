@@ -3,7 +3,7 @@ name: Multi-Site Playwright Monitor
 on:
   schedule:
     - cron: "*/10 * * * *" # runs every 10 minutes
-  workflow_dispatch:
+  workflow_dispatch: # manual trigger
 
 jobs:
   check-sites:
@@ -18,9 +18,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install dependencies & browsers
         run: |
           npm install playwright @sentry/node
+          npx playwright install chromium   # downloads Chromium for CI
 
       - name: Run Playwright multi-site monitor
         run: node check-errors.js
