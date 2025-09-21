@@ -14,13 +14,29 @@ if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 let totalErrors = 0;
 let sitesLoaded = 0;
 
+// Take screenshot with retries
 async function takeScreenshot(page, screenshotPath) {
-  try {
-    await page.evaluate(() => document.fonts.ready); // wait for fonts
-    await page.waitForTimeout(1000);                 // short wait for rendering
-    await page.screenshot({ path: screenshotPath, fullPage: true });
-  } catch (err) {
-    console.error(`⚠️ Failed to take screenshot: ${err.message}`);
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(3000); // wait 3 seconds for rendering
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      return;
+    } catch (err) {
+      console.warn(`⚠️ Screenshot attempt ${attempt} failed: ${err.message}`);
+      if (attempt === 3) {
+        // Fallback: try with fullPage: false
+        try {
+          await page.screenshot({ path: screenshotPath, fullPage: false });
+          console.log('ℹ️ Screenshot taken with fullPage: false');
+          return;
+        } catch (err2) {
+          console.error(`❌ Final screenshot attempt failed: ${err2.message}`);
+        }
+      } else {
+        await page.waitForTimeout(1000);
+      }
+    }
   }
 }
 
@@ -36,9 +52,9 @@ async function checkSite(site) {
     ],
   });
   const page = await browser.newPage();
-
   const pendingScreenshots = [];
 
+  // Listen for console errors
   page.on('console', msg => {
     if (msg.type() === 'error') {
       totalErrors++;
@@ -100,7 +116,7 @@ async function checkSite(site) {
     await checkSite(site);
   }
 
-  // Summary at the end
+  // Summary
   console.log('\n===== Monitoring Summary =====');
   console.log(`✅ Sites loaded successfully: ${sitesLoaded} / ${sites.length}`);
   console.log(`⚠️ Console errors captured: ${totalErrors}`);
