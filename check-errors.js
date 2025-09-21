@@ -11,10 +11,13 @@ Sentry.init({
 const screenshotDir = 'screenshots';
 if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
+let totalErrors = 0;
+let sitesLoaded = 0;
+
 async function takeScreenshot(page, screenshotPath) {
   try {
     await page.evaluate(() => document.fonts.ready); // wait for fonts
-    await page.waitForTimeout(1000);                 // wait 1s for rendering
+    await page.waitForTimeout(1000);                 // short wait for rendering
     await page.screenshot({ path: screenshotPath, fullPage: true });
   } catch (err) {
     console.error(`⚠️ Failed to take screenshot: ${err.message}`);
@@ -36,9 +39,9 @@ async function checkSite(site) {
 
   const pendingScreenshots = [];
 
-  // Capture console errors
   page.on('console', msg => {
     if (msg.type() === 'error') {
+      totalErrors++;
       const filename = `${site.name.replace(/\s+/g, '_')}-${Date.now()}.png`;
       const screenshotPath = path.join(screenshotDir, filename);
 
@@ -64,6 +67,7 @@ async function checkSite(site) {
   try {
     await page.goto(site.url, { waitUntil: 'load', timeout: 60000 });
     console.log(`✅ ${site.name} loaded`);
+    sitesLoaded++;
   } catch (err) {
     console.error(`❌ ${site.name} failed to load:`, err);
 
@@ -87,7 +91,6 @@ async function checkSite(site) {
     );
   }
 
-  // Wait for all screenshots to finish before closing
   await Promise.all(pendingScreenshots);
   await browser.close();
 }
@@ -96,4 +99,10 @@ async function checkSite(site) {
   for (const site of sites) {
     await checkSite(site);
   }
+
+  // Summary at the end
+  console.log('\n===== Monitoring Summary =====');
+  console.log(`✅ Sites loaded successfully: ${sitesLoaded} / ${sites.length}`);
+  console.log(`⚠️ Console errors captured: ${totalErrors}`);
+  console.log('===============================\n');
 })();
