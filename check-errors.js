@@ -11,11 +11,20 @@ Sentry.init({
 const screenshotDir = 'screenshots';
 if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir);
 
+async function takeScreenshot(page, screenshotPath) {
+  try {
+    await page.evaluate(() => document.fonts.ready);  // wait for fonts
+    await page.waitForTimeout(1000);                  // short wait for rendering
+    await page.screenshot({ path: screenshotPath, fullPage: true });
+  } catch (err) {
+    console.error(`⚠️ Failed to take screenshot: ${err.message}`);
+  }
+}
+
 async function checkSite(site) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  // Store pending screenshot promises
   const pendingScreenshots = [];
 
   page.on('console', msg => {
@@ -23,10 +32,9 @@ async function checkSite(site) {
       const filename = `${site.name.replace(/\s+/g, '_')}-${Date.now()}.png`;
       const screenshotPath = path.join(screenshotDir, filename);
 
-      // Push the screenshot promise to the array
       pendingScreenshots.push(
         (async () => {
-          await page.screenshot({ path: screenshotPath, fullPage: true });
+          await takeScreenshot(page, screenshotPath);
           Sentry.withScope(scope => {
             scope.addAttachment({
               filename,
@@ -52,7 +60,7 @@ async function checkSite(site) {
 
     pendingScreenshots.push(
       (async () => {
-        await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+        await takeScreenshot(page, screenshotPath);
         Sentry.withScope(scope => {
           if (fs.existsSync(screenshotPath)) {
             scope.addAttachment({
@@ -67,8 +75,7 @@ async function checkSite(site) {
     );
   }
 
-  // Wait for all screenshots to finish before closing
-  await Promise.all(pendingScreenshots);
+  await Promise.all(pendingScreenshots);  // wait for all screenshots
   await browser.close();
 }
 
