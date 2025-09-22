@@ -1,7 +1,7 @@
 // deploy-smoke.js
 const { chromium } = require('playwright');
 const Sentry = require('@sentry/node');
-const sites = require('./sites.json'); // using the same JSON as monitoring
+const sites = require('./sites.json');
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
@@ -15,14 +15,10 @@ async function checkSite(site) {
     await page.goto(site.url, { waitUntil: 'load', timeout: 60000 });
     console.log(`✅ ${site.name} loaded`);
 
-    // Check critical selectors if defined
-    if (site.criticalSelectors && site.criticalSelectors.length) {
-      for (const selector of site.criticalSelectors) {
-        try {
-          await page.waitForSelector(selector, { timeout: 10000 });
-        } catch {
-          throw new Error(`Critical element "${selector}" not found`);
-        }
+    for (const selectorGroup of site.criticalSelectors) {
+      const found = await page.$(selectorGroup);
+      if (!found) {
+        throw new Error(`Critical element not found for selectors: "${selectorGroup}"`);
       }
     }
   } catch (err) {
