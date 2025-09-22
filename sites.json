@@ -175,9 +175,9 @@
     "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
   },
   {
-    "url": "https://www.telemark-pyrenees.com/",
+    "url": "https://www.telemark-pyrenees.com/touring-skis-backcountry-skiing-telemark-pyrenees",
     "name": "Telemark",
-    "criticalSelectors": ["main, .site-main, .content", "footer, .site-footer"]
+    "criticalSelectors": ["#header", "footer"]
   },
   {
     "url": "https://ti-reporter.com/",
