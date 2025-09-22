@@ -176,7 +176,8 @@
   },
   {
     "url": "https://www.telemark-pyrenees.com/",
-    "name": "Telemark"
+    "name": "Telemark",
+    "criticalSelectors": []
   },
   {
     "url": "https://ti-reporter.com/",
