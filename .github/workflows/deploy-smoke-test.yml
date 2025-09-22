@@ -1,0 +1,27 @@
+name: Deploy Smoke Test
+
+on:
+  workflow_dispatch:  # manual trigger only
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies & browsers
+        run: |
+          npm install playwright @sentry/node
+          npx playwright install chromium   # downloads Chromium for CI
+
+      - name: Run Deploy Smoke Script
+        run: node deploy-smoke.js
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
