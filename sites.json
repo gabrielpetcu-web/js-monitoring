@@ -1,46 +1,207 @@
 [
-  {"url": "https://ag-prime.com/", "name": "AG - Prime", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://airjourney.com/", "name": "Airjourney", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://andreeaungureanu.com/", "name": "Andreea Ungureanu", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://atlantic.eastcoastcatalyst.com/", "name": "Atlantic", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://benecon.com/", "name": "Benecon", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://bog.dk/", "name": "Bog.dk", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://bookstore.yogananda-srf.org/", "name": "BookStore", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.cscsw.com/", "name": "CSC", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.cscswacademic.com/", "name": "CSC Academic", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://csclaundry.com/", "name": "CSC Laundry", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://cscconnectnews.cscsw.com/", "name": "CSC Connect News", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.eastcoastcatalyst.com/", "name": "EastCoastCatalyst", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.formassembly.com/", "name": "FormAssembly", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://freshcoastcabins.com/", "name": "FreshCoast", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://marketingpro.cscsw.com/", "name": "Marketing Pro", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://marketingpro.onetapaway.com/", "name": "Marketing Pro OTA", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://marketplace.cscsw.com/", "name": "MarketPlace", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://onlinemeditation.yogananda.org/", "name": "OnlineMeditation", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://orbionspace.com/", "name": "Orbion", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.perfmonitor.io/", "name": "Perfmonitor", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://railmotus.wpenginepowered.com/", "name": "Railmotus", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://runamokmaple.com/", "name": "RunamokMaple", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://service.cscsw.com/", "name": "Service CSC", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.springfielddevelopment.org/", "name": "Springfield Batranii", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://superlaundry.wpenginepowered.com/", "name": "SuperLaundry", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://vonbargensjewelry.com/", "name": "Vonbargen", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://yoganandaseva.org/", "name": "Yogananda", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.akademisk.dk/", "name": "Akademisk", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://alinea.dk/", "name": "Alinea", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://executive.berkeley.edu/", "name": "Berkeley", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://test.cablezone.ro/", "name": "Cablezone", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.carlsen.dk/", "name": "Carlsen", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://dia.org/", "name": "DIA", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://infoprime.agdeploy.com/", "name": "InfoPrime", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://iwpr.net/", "name": "IWPR", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.lindhardtogringhof.dk/", "name": "Lindhardtogringhof", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "http://osu-cob.agdeploy.com/", "name": "OSU-COB", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://praxis.dk/", "name": "Praxis", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://www.telemark-pyrenees.com/", "name": "Telemark", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://ti-reporter.com/", "name": "Ti Reporter", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://portal.vlg.ro/user/login", "name": "VLG", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://volunteer.yogananda.org/", "name": "Volunteer Portal", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://voluntaryleague.yogananda.org/", "name": "Voluntary SRF", "criticalSelectors": ["header", "main", "footer"]},
-  {"url": "https://voluntaryleague.yssofindia.org/", "name": "Voluntary YSS", "criticalSelectors": ["header", "main", "footer"]}
+  {
+    "url": "https://ag-prime.com/",
+    "name": "AG - Prime",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://airjourney.com/",
+    "name": "Airjourney",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://andreeaungureanu.com/",
+    "name": "Andreea Ungureanu",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://atlantic.eastcoastcatalyst.com/",
+    "name": "Atlantic",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://benecon.com/",
+    "name": "Benecon",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://bog.dk/",
+    "name": "Bog.dk",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://bookstore.yogananda-srf.org/",
+    "name": "BookStore",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.cscsw.com/",
+    "name": "CSC",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.cscswacademic.com/",
+    "name": "CSC Academic",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://csclaundry.com/",
+    "name": "CSC Laundry",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://cscconnectnews.cscsw.com/",
+    "name": "CSC Connect News",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.eastcoastcatalyst.com/",
+    "name": "EastCoastCatalyst",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.formassembly.com/",
+    "name": "FormAssembly",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://freshcoastcabins.com/",
+    "name": "FreshCoast",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://marketingpro.cscsw.com/",
+    "name": "Marketing Pro",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://marketingpro.onetapaway.com/",
+    "name": "Marketing Pro OTA",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://marketplace.cscsw.com/",
+    "name": "MarketPlace",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://onlinemeditation.yogananda.org/",
+    "name": "OnlineMeditation",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://orbionspace.com/",
+    "name": "Orbion",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.perfmonitor.io/",
+    "name": "Perfmonitor",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://runamokmaple.com/",
+    "name": "RunamokMaple",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://service.cscsw.com/",
+    "name": "Service CSC",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.springfielddevelopment.org/",
+    "name": "Springfield Batranii",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://vonbargensjewelry.com/",
+    "name": "Vonbargen",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://yoganandaseva.org/",
+    "name": "Yogananda",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.akademisk.dk/",
+    "name": "Akademisk",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://alinea.dk/",
+    "name": "Alinea",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://executive.berkeley.edu/",
+    "name": "Berkeley",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://cablezone.ro/o/",
+    "name": "Cablezone",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.carlsen.dk/",
+    "name": "Carlsen",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://dia.org/",
+    "name": "DIA",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://iwpr.net/",
+    "name": "IWPR",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.lindhardtogringhof.dk/",
+    "name": "Lindhardtogringhof",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://business.oregonstate.edu/",
+    "name": "OSU-COB",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://praxis.dk/",
+    "name": "Praxis",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://www.telemark-pyrenees.com/",
+    "name": "Telemark",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://ti-reporter.com/",
+    "name": "Ti Reporter",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://portal.vlg.ro/",
+    "name": "VLG",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://volunteer.yogananda.org/",
+    "name": "Volunteer Portal",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://voluntaryleague.yogananda.org/",
+    "name": "Voluntary SRF",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  },
+  {
+    "url": "https://voluntaryleague.yssofindia.org/",
+    "name": "Voluntary YSS",
+    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+  }
 ]
