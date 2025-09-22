@@ -24,14 +24,19 @@ async function checkSite(site) {
 
   const page = await browser.newPage();
 
-  // Capture console errors
+  // Capture console errors (downgraded to warning)
   page.on('console', msg => {
     if (msg.type() === 'error') {
       totalErrors++;
       errorSites.add(site.name);
       const errorMessage = `[${site.name}] ${msg.text()}`;
       console.error(errorMessage);
-      Sentry.captureMessage(errorMessage, 'error');
+
+      // downgraded from error → warning
+      Sentry.captureMessage(errorMessage, {
+        level: 'warning',
+        tags: { failure_type: 'console-error', site: site.name },
+      });
     }
   });
 
@@ -42,7 +47,14 @@ async function checkSite(site) {
   } catch (err) {
     console.error(`❌ ${site.name} failed to load:`, err);
     errorSites.add(site.name);
-    Sentry.captureException(new Error(`[${site.name}] ${err.message}`));
+
+    // Clearer failure message: "SITE is down"
+    const failureMessage = `${site.name} is down`;
+
+    Sentry.captureException(new Error(failureMessage), {
+      tags: { failure_type: 'load-failure', site: site.name },
+      extra: { url: site.url }, // add the site URL to event details
+    });
   }
 
   await browser.close();
