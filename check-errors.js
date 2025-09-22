@@ -32,15 +32,18 @@ page.on('console', msg => {
     const errorMessage = `[${site.name}] ${msg.text()}`;
     console.error(errorMessage);
 
-    // If CSS MIME type error → escalate to error + include URL
-    if (msg.text().includes("Refused to apply style from") && msg.text().includes("MIME type")) {
+    // Escalate CSS/JS MIME type errors → real error
+    if (
+      (msg.text().includes("Refused to apply style from") && msg.text().includes("MIME type")) ||
+      (msg.text().includes("Refused to execute script from") && msg.text().includes("MIME type"))
+    ) {
       Sentry.captureMessage(errorMessage, {
-        level: 'error', // escalate to error
-        tags: { failure_type: 'css-mime-error', site: site.name },
-        extra: { cssError: msg.text() }, // full raw error with the CSS URL
+        level: 'error',
+        tags: { failure_type: 'mime-error', site: site.name },
+        extra: { mimeError: msg.text() },
       });
     } else {
-      // Default: downgrade other console errors to warning
+      // Default: downgrade to warning
       Sentry.captureMessage(errorMessage, {
         level: 'warning',
         tags: { failure_type: 'console-error', site: site.name },
@@ -48,6 +51,7 @@ page.on('console', msg => {
     }
   }
 });
+
 
   try {
     await page.goto(site.url, { waitUntil: 'load', timeout: 60000 });
