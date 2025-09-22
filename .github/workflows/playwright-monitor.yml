@@ -1,26 +1,29 @@
-name: JS Error Monitoring
+name: Multi-Site Playwright Monitor
 
 on:
   schedule:
     # Run every day at 00:00 UTC
     - cron: '0 0 * * *'
-  workflow_dispatch: # optional: allow manual run
+  workflow_dispatch:
 
 jobs:
-  check-errors:
+  check-sites:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install playwright @sentry/node
 
-      - name: Run JS Error Monitoring
+      - name: Run Playwright multi-site monitor
+        run: node check-errors.js
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        run: node check-errors.js
