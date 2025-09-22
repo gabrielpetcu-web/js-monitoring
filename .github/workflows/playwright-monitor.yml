@@ -19,9 +19,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install dependencies & browsers
         run: |
           npm install playwright @sentry/node
+          npx playwright install chromium   # downloads Chromium for CI
 
       - name: Run Playwright multi-site monitor
         run: node check-errors.js
