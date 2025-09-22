@@ -25,20 +25,29 @@ async function checkSite(site) {
   const page = await browser.newPage();
 
   // Capture console errors (downgraded to warning)
-  page.on('console', msg => {
-    if (msg.type() === 'error') {
-      totalErrors++;
-      errorSites.add(site.name);
-      const errorMessage = `[${site.name}] ${msg.text()}`;
-      console.error(errorMessage);
+page.on('console', msg => {
+  if (msg.type() === 'error') {
+    totalErrors++;
+    errorSites.add(site.name);
+    const errorMessage = `[${site.name}] ${msg.text()}`;
+    console.error(errorMessage);
 
-      // downgraded from error → warning
+    // If CSS MIME type error → escalate to error + include URL
+    if (msg.text().includes("Refused to apply style from") && msg.text().includes("MIME type")) {
+      Sentry.captureMessage(errorMessage, {
+        level: 'error', // escalate to error
+        tags: { failure_type: 'css-mime-error', site: site.name },
+        extra: { cssError: msg.text() }, // full raw error with the CSS URL
+      });
+    } else {
+      // Default: downgrade other console errors to warning
       Sentry.captureMessage(errorMessage, {
         level: 'warning',
         tags: { failure_type: 'console-error', site: site.name },
       });
     }
-  });
+  }
+});
 
   try {
     await page.goto(site.url, { waitUntil: 'load', timeout: 60000 });
