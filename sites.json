@@ -27,7 +27,7 @@
   {
     "url": "https://bog.dk/",
     "name": "Bog.dk",
-    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+    "criticalSelectors": ["header, .site-header", "footer, .site-footer"]
   },
   {
     "url": "https://bookstore.yogananda-srf.org/",
@@ -117,7 +117,7 @@
   {
     "url": "https://vonbargensjewelry.com/",
     "name": "Vonbargen",
-    "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
+    "criticalSelectors": ["header, .site-header", "footer, .site-footer"]
   },
   {
     "url": "https://yoganandaseva.org/",
@@ -175,7 +175,7 @@
     "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
   },
   {
-    "url": "https://www.telemark-pyrenees.com/",
+    "url": "https://www.telemark-pyrenees.com/touring-skis-backcountry-skiing-telemark-pyrenees",
     "name": "Telemark",
     "criticalSelectors": ["header, .site-header", "main, .site-main, .content", "footer, .site-footer"]
   },
